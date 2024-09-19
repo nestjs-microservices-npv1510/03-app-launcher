@@ -1,3 +1,6 @@
 [submodule "client-gateway"]
 	path = client-gateway
 	url = https://github.com/nestjs-microservices-npv1510/gateway
+[submodule "orders-ms"]
+	path = orders-ms
+	url = https://github.com/nestjs-microservices-npv1510/orders-microservice.git
