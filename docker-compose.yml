@@ -17,26 +17,26 @@ services:
       - PORT=${CLIENT_GATEWAY_MS_PORT}
       - NATS_SERVERS=nats://nats-server:4222
 
-  product-ms:
-    build: ./product-ms
+  products-ms:
+    build: ./products-ms
     ports:
       - '${PRODUCTS_MS_PORT}:${PRODUCTS_MS_PORT}'
     volumes:
-      - ./product-ms/src:/usr/src/app/src
+      - ./products-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
       - PORT=${PRODUCTS_MS_PORT}
       - NATS_SERVERS=nats://nats-server:4222
       - DATABASE_URL=file:./dev.db
 
-  order-ms:
+  orders-ms:
     depends_on:
       - orders-db
-    build: ./order-ms
+    build: ./orders-ms
     ports:
       - '${ORDERS_MS_PORT}:${ORDERS_MS_PORT}'
     volumes:
-      - ./order-ms/src:/usr/src/app/src
+      - ./orders-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
       - PORT=${ORDERS_MS_PORT}
@@ -48,7 +48,7 @@ services:
     image: postgres:16.2
     restart: always
     volumes:
-      - ./order-ms/postgres:/var/lib/postgresql/data
+      - ./orders-ms/postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
