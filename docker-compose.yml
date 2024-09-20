@@ -7,6 +7,7 @@ services:
       - '4222:4222'
       - '8222:8222'
   client-gateway:
+    container_name: client-gateway
     build: ./client-gateway
     ports:
       - '${CLIENT_GATEWAY_MS_PORT}:${CLIENT_GATEWAY_MS_PORT}'
@@ -18,6 +19,7 @@ services:
       - NATS_SERVERS=nats://nats-server:4222
 
   products-ms:
+    container_name: products-ms
     build: ./products-ms
     ports:
       - '${PRODUCTS_MS_PORT}:${PRODUCTS_MS_PORT}'
@@ -30,6 +32,7 @@ services:
       - DATABASE_URL=file:./dev.db
 
   orders-ms:
+    container_name: orders-ms
     depends_on:
       - orders-db
     build: ./orders-ms
@@ -55,3 +58,20 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=ordersdb
+
+  payments-ms:
+    container_name: payments-ms
+    build: ./payments-ms
+    ports:
+      - ${PAYMENTS_MS_PORT}:${PAYMENTS_MS_PORT}
+    volumes:
+      - ./payments-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=${PAYMENTS_MS_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_SESSION_SUCCESS_URL=${STRIPE_SESSION_SUCCESS_URL}
+      - STRIPE_SESSION_CANCEL_URL=${STRIPE_SESSION_CANCEL_URL}
+      - STRIPE_WEBHOOK_SECRET_KEY=${STRIPE_WEBHOOK_SECRET_KEY}
