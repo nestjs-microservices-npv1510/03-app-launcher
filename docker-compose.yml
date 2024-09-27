@@ -75,3 +75,18 @@ services:
       - STRIPE_SESSION_SUCCESS_URL=${STRIPE_SESSION_SUCCESS_URL}
       - STRIPE_SESSION_CANCEL_URL=${STRIPE_SESSION_CANCEL_URL}
       - STRIPE_WEBHOOK_SECRET_KEY=${STRIPE_WEBHOOK_SECRET_KEY}
+
+  auth-ms:
+    container_name: auth-ms
+    build: ./auth-ms
+    ports:
+      - ${AUTH_MS_PORT}:${AUTH_MS_PORT}
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=${AUTH_MS_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+      - MONGO_DATABASE_URL=${MONGO_DATABASE_URL}
+      - JWT_SECRET_KEY= ${JWT_SECRET_KEY}
+      - ACCESS_TOKEN_EXPIRES_IN= ${ACCESS_TOKEN_EXPIRES_IN}
